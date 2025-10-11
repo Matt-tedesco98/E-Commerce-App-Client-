@@ -8,8 +8,21 @@ export default function Register() {
         setForm({...form, [e.target.name]: e.target.value});
     }
 
-    function onSubmit() {
-        console.log(form)
+    async function onSubmit() {
+        try {
+            const res = await fetch("http://localhost:4000/register", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Register failed.");
+            console.log("Registered as:", data);
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
