@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import "./Register.css"
 
 export default function Register() {
     const [form, setForm] = useState({username: '', password: ''});
@@ -12,10 +13,13 @@ export default function Register() {
     }
 
     return (
-        <div>
+        <div className="head">
             <h1>Create your account</h1>
-            <form onSubmit={(e) => {e.preventDefault(); onSubmit();}}>
-                <div>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                onSubmit();
+            }}>
+                <div className="user-pass">
                     <label>Username</label> <br/>
                     <input
                         id="username"
@@ -26,7 +30,7 @@ export default function Register() {
                         required
                     />
                 </div>
-                <div>
+                <div className="user-pass">
                     <label>Password</label> <br/>
                     <input
                         id="password"
