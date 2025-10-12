@@ -47,3 +47,17 @@ label {
     color: whitesmoke;
     font-size: 1.5rem;
 }
+
+p {
+    text-align: center;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: whitesmoke;
+    cursor: pointer;
+}

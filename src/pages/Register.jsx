@@ -1,5 +1,7 @@
 import {useState} from 'react'
 import "./Register.css"
+import {Link} from "react-router-dom";
+
 
 export default function Register() {
     const [form, setForm] = useState({username: '', password: ''});
@@ -8,14 +10,16 @@ export default function Register() {
         setForm({...form, [e.target.name]: e.target.value});
     }
 
-    async function onSubmit() {
+    async function onSubmit(e) {
+        e.preventDefault()
         try {
-            const res = await fetch("http://localhost:4000/register", {
+            const res = await fetch("http://localhost:4000/auth/register", {
                 method: "POST",
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json"
                 },
+                body: JSON.stringify(form)
             });
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Register failed.");
@@ -28,10 +32,7 @@ export default function Register() {
     return (
         <div className="head">
             <h1>Create your account</h1>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                onSubmit();
-            }}>
+            <form onSubmit={onSubmit}>
                 <div className="user-pass">
                     <label>Username</label> <br/>
                     <input
@@ -57,6 +58,11 @@ export default function Register() {
                 </div>
                 <button type="submit">Sign Up</button>
             </form>
+            <div>
+                <p>
+                    <Link to="/login">Already have an Account?</Link>
+                </p>
+            </div>
         </div>
     )
 }

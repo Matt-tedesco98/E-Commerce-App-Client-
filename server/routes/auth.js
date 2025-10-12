@@ -1,11 +1,14 @@
-import bcrypt from 'bcryptjs'
-import express from "express";
+const bcrypt = require('bcryptjs')
+const express = require("express");
 
 const router = express.Router();
 
 const users = []
 
 router.post("/register", async (req, res) => {
+    // console.log('session before set:', req.session);
+    // if (!req.session) req.session = {}; // guard to avoid 500s while debugging
+
     const {username, password} = req.body;
 
     if (!username || !password)
@@ -19,7 +22,7 @@ router.post("/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     //store user
-    const user = {id: users.length + 1, username, password_hash: hash };
+    const user = {id: users.length + 1, username, password_hash: hash};
     users.push(user);
 
     //auto-login
@@ -29,4 +32,4 @@ router.post("/register", async (req, res) => {
     res.status(201).json({id: user.id, username: user.username});
 });
 
-export default router;
+module.exports = router;
