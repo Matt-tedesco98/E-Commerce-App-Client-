@@ -32,4 +32,15 @@ router.post("/register", async (req, res) => {
     res.status(201).json({id: user.id, username: user.username});
 });
 
+
+router.post("/login", async (req, res) => {
+    const {username, password} = req.body;
+    if (!username || !password)
+        return res.status(400).json({error: "Username or password required"});
+    const user = {username, password};
+    if (!users.find(u => u.username === username))
+        return res.status(400).json({error: "Username or password required"});
+
+})
+
 module.exports = router;
