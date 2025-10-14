@@ -2,10 +2,15 @@ import {useState} from 'react'
 import "./Register.css"
 import {Link} from "react-router-dom";
 import AuthLayout from "../../Components/AuthLayout/AuthLayout";
+import {useNavigate} from "react-router-dom";
 
 
 export default function Register() {
     const [form, setForm] = useState({username: '', password: ''});
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState('');
+    const navigate = useNavigate();
 
     function onChange(e) {
         setForm({...form, [e.target.name]: e.target.value});
@@ -13,6 +18,8 @@ export default function Register() {
 
     async function onSubmit(e) {
         e.preventDefault()
+        setError('')
+        setLoading(true)
         try {
             const res = await fetch("http://localhost:4000/auth/register", {
                 method: "POST",
@@ -23,8 +30,14 @@ export default function Register() {
                 body: JSON.stringify(form)
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || "Register failed.");
+            if (!res.ok) {
+                setError(data.error || "User already exists.");
+            return;
+            }
             console.log("Registered as:", data);
+            setSuccess('Account created successfully! Redirecting....');
+            setTimeout(() =>{navigate('/')}, 1500)
+            setLoading(false)
         } catch (err) {
             console.log(err)
         }
@@ -33,6 +46,12 @@ export default function Register() {
     return (
         <AuthLayout title="Create your account"
                     footer={<p><Link to="/login">Already have an account? Log in</Link></p>}>
+            {error && (
+                <div className="error">{error}</div>
+            )}
+            {success && (
+                <div className="success">{success}</div>
+            )}
             <form onSubmit={onSubmit}>
                 <div className="user-pass">
                     <label>Username</label> <br/>
@@ -58,7 +77,9 @@ export default function Register() {
                         minLength={8}
                     />
                 </div>
-                <button type="submit">Sign Up</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Creating account...' : 'Sign Up'}
+                </button>
             </form>
         </AuthLayout>
     )
