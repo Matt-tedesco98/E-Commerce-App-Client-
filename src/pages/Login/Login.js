@@ -1,21 +1,52 @@
 import {useState} from 'react'
 import "./Login.css"
-import {Link} from "react-router-dom";
+import AuthLayout from "../../Components/AuthLayout/AuthLayout";
+import {Link, useNavigate} from "react-router-dom";
 
 
 export default function Login() {
     const [form, setForm] = useState({username: '', password: ''});
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     function onChange(e) {
         setForm({...form, [e.target.name]: e.target.value});
     }
 
     async function onSubmit(e) {
+        e.preventDefault()
+        setError('')
+        setLoading(true)
+        try {
+            const res = await fetch("http://localhost:4000/auth/login", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(form)
+            })
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.error || "Login failed.");
+                return;
+            }
+            console.log("Logged in as:", data.username);
+            navigate("/");
+            setLoading(false)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
-        <div className="head">
-            <h1>Sign In</h1>
+        <AuthLayout title="Login to your account" footer={<p>
+            <Link to="/register">Dont Have an Account Yet?</Link>
+        </p>}>
+            {error && (
+                <div className="error">{error}</div>
+            )}
             <form onSubmit={onSubmit}>
                 <div className="user-pass">
                     <label>Username</label> <br/>
@@ -31,27 +62,28 @@ export default function Login() {
                 <div className="user-pass">
                     <label>Password</label> <br/>
                     <input
+                        type="password"
                         id="password"
                         name="password"
                         value={form.password}
                         onChange={onChange}
-                        autoComplete="new-password"
+                        autoComplete="current-password"
                         required
                         minLength={8}
                     />
                 </div>
-                <button type="submit">Sign In</button>
-            <div>
-                <p>
-                    <Link to="/register">Dont Have an Account Yet?</Link>
-                </p>
-            </div>
-            <div className="external_login">
-                <button>Sign In With Facebook</button>
-                <button>Sign In With Google</button>
-            </div>
-
+                <button type="submit" disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</button>
             </form>
-        </div>
+            <div className="external_login">
+                <button type="button" onClick={() => {
+                    window.location.href = '/auth/facebook'
+                }}>Sign In With Facebook
+                </button>
+                <button type="button" onClick={() => {
+                    window.location.href = '/auth/google'
+                }}>Sign In With Google
+                </button>
+            </div>
+        </AuthLayout>
     )
 }

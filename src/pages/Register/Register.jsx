@@ -48,6 +48,7 @@ export default function Register() {
                 <div className="user-pass">
                     <label>Password</label> <br/>
                     <input
+                        type="password"
                         id="password"
                         name="password"
                         value={form.password}
