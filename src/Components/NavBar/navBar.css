@@ -1,12 +1,19 @@
-.navbar {
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: cornflowerblue;
     border-radius: 12px;
-    color: antiquewhite;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+}
+.navbar {
     display: flex;
     gap: 1rem;
+    color: antiquewhite;
+    font-size: 1.1rem;
     align-items: center;
-    justify-content: center;
+    flex: 1;
 }
 
 .navbar a {
@@ -19,4 +26,19 @@
     text-decoration: underline;
 }
 
+.logout-btn {
+    display: flex;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    align-content: flex-end;
+    margin-left: auto;
+}
+
+.logout-btn:hover {
+    background-color: darkred;
+}
 

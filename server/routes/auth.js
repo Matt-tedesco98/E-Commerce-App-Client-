@@ -51,8 +51,13 @@ router.post("/login", async (req, res) => {
     req.session.user = {id: found.id, username: found.username};
     await res.json({id: found.id, username: found.username});
     if(res.ok){
-        
+
     }
+
+router.post("/logout", (req, res) => {
+    req.session = null;
+    res.json({ok: true});
+})
 
 })
 
