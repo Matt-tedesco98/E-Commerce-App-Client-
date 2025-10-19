@@ -80,7 +80,7 @@ export default function Login() {
                 }}>Sign In With Facebook
                 </button>
                 <button type="button" onClick={() => {
-                    window.location.href = '/auth/google'
+                    window.location.href = 'http://localhost:4000/auth/google'
                 }}>Sign In With Google
                 </button>
             </div>

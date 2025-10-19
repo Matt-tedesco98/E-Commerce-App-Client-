@@ -1,15 +1,17 @@
 const bcrypt = require('bcryptjs')
 const express = require("express");
+const passport = require("../auth/passport");
 
 const router = express.Router();
 
 const users = []
 
 router.get('/me', (req, res) => {
-  if (!req.session || !req.session.user) {
-    return res.status(401).json({ error: 'Not signed in' });
-  }
-  res.json(req.session.user); // { id, username }
+    if (!req.isAuthenticated?.() || !req.user) {
+        return res.status(401).send('Not signed in');
+    }
+    const {id, username} = req.user;
+    res.json({id, username})
 });
 
 router.post("/register", async (req, res) => {
@@ -50,15 +52,34 @@ router.post("/login", async (req, res) => {
     if (!valid) return res.status(401).json({error: "Invalid username or password"});
     req.session.user = {id: found.id, username: found.username};
     await res.json({id: found.id, username: found.username});
-    if(res.ok){
-
-    }
+})
 
 router.post("/logout", (req, res) => {
     req.session = null;
     res.json({ok: true});
 })
 
-})
+// google api login
+router.get('/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: 'http://localhost:3000/login',
+        session: true
+    }), (req, res) => {
+        res.redirect(`http://localhost:3000/`);
+    })
+
+
+router.get('/google',
+    passport.authenticate('google', {
+            scope: ['openid', 'profile', 'email'],
+        },
+    ));
+
+//facebook api login
+
+router.get('/facebook',)
+
+router.get('/facebook/callback',)
+
 
 module.exports = router;

@@ -1,0 +1,37 @@
+const passport = require('passport');
+const {Strategy: GoogleStrategy} = require('passport-google-oauth20')
+
+//TODO: import your users store/helpers here
+
+passport.serializeUser((user, done) => {
+    done(null, {id: user.id, username: user.username})
+})
+
+passport.deserializeUser((obj, done) => {
+    done(null, obj)
+})
+
+passport.use(new GoogleStrategy(
+    {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            //TODO: find-or-create user using profile info
+            const user = {
+                id: profile.id,
+                username: profile.displayName || "Google User",
+                provider: "google",
+                providerId: profile.id,
+            };
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        }
+    }
+));
+
+
+module.exports = passport;
