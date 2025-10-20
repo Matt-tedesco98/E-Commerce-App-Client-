@@ -76,7 +76,7 @@ export default function Login() {
             </form>
             <div className="external_login">
                 <button type="button" onClick={() => {
-                    window.location.href = '/auth/facebook'
+                    window.location.href = 'http://localhost:4000/auth/facebook'
                 }}>Sign In With Facebook
                 </button>
                 <button type="button" onClick={() => {

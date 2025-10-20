@@ -77,9 +77,19 @@ router.get('/google',
 
 //facebook api login
 
-router.get('/facebook',)
+router.get('/facebook',
+    passport.authenticate('facebook')
+);
 
-router.get('/facebook/callback',)
+router.get('/facebook/callback',
+    passport.authenticate('facebook', {
+        failureRedirect: 'http://localhost:3000/login',
+        session: true,
+        successRedirect: 'http://localhost:3000/',
+    }),
+    (req, res) => {
+        res.redirect(`http://localhost:3000/`);
+    })
 
 
 module.exports = router;
