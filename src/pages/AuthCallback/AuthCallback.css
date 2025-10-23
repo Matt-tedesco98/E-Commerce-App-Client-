@@ -1,0 +1,8 @@
+.auth-callback {
+    padding: 2rem;
+}
+
+.auth-callback p {
+    text-align: center;
+    color: crimson;
+}
