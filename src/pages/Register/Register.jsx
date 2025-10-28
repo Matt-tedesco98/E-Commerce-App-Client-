@@ -1,8 +1,9 @@
-import {useState} from 'react'
+import {useContext, useState} from 'react'
 import "./Register.css"
 import {Link} from "react-router-dom";
 import AuthLayout from "../../Components/AuthLayout/AuthLayout";
 import {useNavigate} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext";
 
 
 export default function Register() {
@@ -11,6 +12,7 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
     const navigate = useNavigate();
+    const {setUser} = useContext(AuthContext);
 
     function onChange(e) {
         setForm({...form, [e.target.name]: e.target.value});
@@ -37,6 +39,7 @@ export default function Register() {
             console.log("Registered as:", data);
             setSuccess('Account created successfully! Redirecting....');
             setTimeout(() =>{navigate('/')}, 1500)
+            setUser(data);
             setLoading(false)
         } catch (err) {
             console.log(err)

@@ -7,12 +7,17 @@ const {Strategy: FacebookStrategy} = require('passport-facebook');
 module.exports = function loadPassport(app) {
 
     passport.serializeUser((user, done) => {
-        done(null, user.id)
-    })
+        done(null, {
+            id: user.id,
+            username: user.username,
+            email: user.email ?? null,
+            avatar: user.avatar ?? null,
+        });
+    });
 
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser((obj, done) => {
         //TODO: replace with db lookup
-        done(null, { id, username: "User" })
+        done(null, obj)
     })
 
     // google strategy
@@ -24,14 +29,15 @@ module.exports = function loadPassport(app) {
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                //TODO: find-or-create user using profile info
-                const user = {
+                const email  = profile.emails?.[0]?.value ?? null;
+                const avatar = profile.photos?.[0]?.value ?? null;
+                const username = profile.displayName || profile.name?.givenName || 'Google User';
+                return done(null, {
                     id: profile.id,
-                    username: profile.displayName || "Google User",
-                    provider: "google",
-                    providerId: profile.id,
-                };
-                return done(null, user);
+                    username,
+                    email,
+                    avatar,
+                });
             } catch (err) {
                 return done(err);
             }
@@ -44,18 +50,25 @@ module.exports = function loadPassport(app) {
             clientID: process.env.FACEBOOK_APP_ID,
             clientSecret: process.env.FACEBOOK_APP_SECRET,
             callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-            profileFields: ['id', 'displayName', 'email', 'photos'],
+            profileFields: ['id', 'displayName', 'emails', 'photos'],
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const email = profile.email?.[0]?.value ?? null;
-                //TODO: insert into db
-                return done(null, {id: profile.id, username: profile.username, email});
+                const email  = profile.emails?.[0]?.value ?? null; // FB may not provide email
+                const avatar = profile.photos?.[0]?.value ?? null;
+                const username = profile.displayName || profile.username || 'Facebook User';
+                return done(null, {
+                    id: profile.id,
+                    username,
+                    email,
+                    avatar,
+                });
             } catch (err) {
                 return done(err);
             }
         }
     ))
-
+    app.use(passport.initialize());
+    app.use(passport.session());
 
 }

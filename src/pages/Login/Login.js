@@ -1,7 +1,8 @@
-import {useState} from 'react'
+import {useContext, useState} from 'react'
 import "./Login.css"
 import AuthLayout from "../../Components/AuthLayout/AuthLayout";
 import {Link, useNavigate} from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export default function Login() {
@@ -9,6 +10,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const {setUser} = useContext(AuthContext);
 
     function onChange(e) {
         setForm({...form, [e.target.name]: e.target.value});
@@ -33,8 +35,9 @@ export default function Login() {
                 return;
             }
             console.log("Logged in as:", data.username);
-            navigate("/");
+            setUser(data);
             setLoading(false)
+            navigate("/")
         } catch (err) {
             console.log(err)
         }

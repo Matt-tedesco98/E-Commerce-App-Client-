@@ -6,3 +6,12 @@
     text-align: center;
     color: crimson;
 }
+
+.auth-callback h2 {
+    text-align: center;
+    color: black;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+
+}

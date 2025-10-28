@@ -3,6 +3,7 @@ import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import AuthCallback from "./pages/AuthCallback/AuthCallback";
+import ProductPage from "./pages/products/ProductPage";
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path='/auth/callback' element={<AuthCallback/>}/>
+                <Route path='/products' element={<ProductPage/>}/>
             </Routes>
         </BrowserRouter>
     )

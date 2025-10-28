@@ -1,0 +1,24 @@
+.product-container{
+    background-color: black;
+    width:20%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+.product-container .product-container-header{
+    color:white;
+    font-size: 8px;
+}
+
+.product-container .product-container-img img{
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}

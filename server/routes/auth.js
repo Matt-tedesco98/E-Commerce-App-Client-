@@ -1,16 +1,9 @@
-const express = require("express");
-const {register, login, logout} = require("../auth/auth");
-const passport = require("../loaders/passport");
+const router = require("express").Router();
+const passport = require("passport");
+const {register, login, logout, me} = require("../controllers/auth");
 
-const router = express.Router();
 
-router.get('/me', (req, res) => {
-    if (!req.isAuthenticated?.() || !req.user) {
-        return res.status(401).send('Not signed in');
-    }
-    const {id, username} = req.user;
-    res.json({id, username})
-});
+router.get('/me', me)
 
 router.post("/register", register);
 
@@ -21,11 +14,11 @@ router.post("/logout", logout)
 // google api login
 router.get('/google/callback',
     passport.authenticate('google', {
-        failureRedirect: 'http://localhost:3000/login',
+        failureRedirect: 'http://localhost:3000/login?error=oauth_failed',
+        successRedirect: 'http://localhost:3000/auth/callback',
         session: true
-    }), (req, res) => {
-        res.redirect(`http://localhost:3000/`);
     })
+)
 
 
 router.get('/google',
@@ -42,13 +35,19 @@ router.get('/facebook',
 
 router.get('/facebook/callback',
     passport.authenticate('facebook', {
-        failureRedirect: 'http://localhost:3000/login',
+        failureRedirect: 'http://localhost:3000/login?error=oauth_failed',
         session: true,
-        successRedirect: 'http://localhost:3000/',
-    }),
-    (req, res) => {
-        res.redirect(`http://localhost:3000/`);
+        successRedirect: 'http://localhost:3000/auth/callback',
     })
+)
+
+router.get('/debug/session', (req, res) => {
+  res.json({
+    isAuthenticated: !!(req.isAuthenticated?.() && req.user),
+    user: req.user || req.session?.user || null,
+    sessionCookiePresent: !!req.headers.cookie,
+  });
+});
 
 
 module.exports = router;

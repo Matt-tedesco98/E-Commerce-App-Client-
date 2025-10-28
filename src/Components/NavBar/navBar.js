@@ -27,9 +27,11 @@ function NavBar() {
             <nav className="navbar">
                 <Link to="/">Home</Link>
                 <span> | </span>
+                <Link to="/products">Products</Link>
+                <span> | </span>
                 {!loading && user ?
                         <>
-                            <span>Welcome, {user.username}</span>
+                            <span>Welcome, {user.username.split(" ")[0]}</span>
                         </>
                     :
                         <>
