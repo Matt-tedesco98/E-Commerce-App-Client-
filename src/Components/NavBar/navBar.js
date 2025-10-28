@@ -8,6 +8,7 @@ function NavBar() {
     const navigate = useNavigate();
     const {user, setUser, loading} = useContext(AuthContext);
     console.log("AuthContext value in NavBar:", useContext(AuthContext));
+
     async function handleLogout() {
         try {
             const res = await fetch("http://localhost:4000/auth/logout", {
@@ -25,30 +26,31 @@ function NavBar() {
     return (
         <header className="navbar-container">
             <nav className="navbar">
-                <Link to="/">Home</Link>
-                <span> | </span>
-                <Link to="/products">Products</Link>
-                <span> | </span>
+                <div className="nav-left">
+                    <Link to="/">Home</Link>
+                    <span> | </span>
+                    <Link to="/products">Products</Link>
+                </div>
+                <div className="nav-right">
                 {!loading && user ?
-                        <>
-                            <span>Welcome, {user.username.split(" ")[0]}</span>
-                        </>
+                    <>
+                        <span>Welcome, {user.username.split(" ")[0]}</span>
+                        <button type="button"
+                                onClick={handleLogout}
+                                className="logout-btn">
+                            Logout
+                        </button>
+                    </>
                     :
-                        <>
-                            <Link to="/login">Login</Link>
-                            <span> | </span>
-                            <Link to="/register">Register</Link>
-                        </>
+                    <>
+                        <Link to="/login">Login</Link>
+                        <span> | </span>
+                        <Link to="/register">Register</Link>
+                    </>
 
                 }
+                </div>
             </nav>
-            {user &&
-                <button type="button"
-                        onClick={handleLogout}
-                        className="logout-btn">
-                    Logout
-                </button>
-            }
         </header>
 
     )

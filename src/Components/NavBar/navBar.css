@@ -9,11 +9,18 @@
 }
 .navbar {
     display: flex;
-    gap: 1rem;
+    margin: 1rem auto;
     color: antiquewhite;
     font-size: 1.1rem;
+    justify-content: space-between;
     align-items: center;
     flex: 1;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .navbar a {
