@@ -50,13 +50,13 @@ export default function ProductList() {
         if (!q) return products;
         return products.filter(p => (p.name || "").toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q));
     }, [products, query]);
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
+    if (loading) return <p className="loading">Loading...</p>;
+    if (error) return <p className="error">Error: {error}</p>;
     if (!filteredProducts.length) {
         return (
-            <div>
-                <div>
-                    <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search products..."/>
+            <div className= "product-list">
+                <div className= "product-list-container">
+                    <input className="input" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search products..."/>
                 </div>
                 <p>No products found.</p>
             </div>
@@ -64,10 +64,10 @@ export default function ProductList() {
     }
     return (
         <section className="product-list">
-            <div>
-                <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search products..."/>
-            </div>
             <div className="product-list-container">
+                <input className="input" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search products..."/>
+            </div>
+            <div className="all-products">
                 {filteredProducts.map(p => (
                     <ProductCard key={p.id || p.name} product={p}/>
                 ))}

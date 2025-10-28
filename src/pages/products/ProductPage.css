@@ -1,0 +1,20 @@
+.product-page {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-page header {
+    padding: 24px;
+}
+
+.product-page h2 {
+    margin: 0;
+    padding: 12px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.product-page p {
+    margin: 0;
+    color: #6b7280;
+}
