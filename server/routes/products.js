@@ -27,4 +27,11 @@ const PRODUCTS = [
 
 router.get('/', (req, res) => res.json(PRODUCTS));
 
+router.get('/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const item = PRODUCTS.find(p => p.id === id);
+    if(!item) return res.status(404).json({error: "Product not found"});
+    res.json(item)
+});
+
 module.exports = router;
