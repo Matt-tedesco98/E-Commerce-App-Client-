@@ -27,6 +27,7 @@
 
 .product-details .back-btn:hover {
     background-color: #0056b3;
+    cursor: pointer;
 }
 
 .product-details-container {

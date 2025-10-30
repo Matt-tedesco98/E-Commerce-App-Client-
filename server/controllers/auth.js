@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs')
-
-const users = [];
+const userModel = require('../models/user');
 
 exports.me = async (req, res) => {
     // Accept either Passport (req.user) or manual session (req.session.user)
@@ -24,47 +23,52 @@ exports.register = async (req, res) => {
     if (!username || !password)
         return res.status(400).json({error: "Username or password required"});
 
-    // if username exists check
-    const exists = users.find(u => u.username === username);
-    if (exists) return res.status(409).json({error: "Username already exists"});
+    // Check if username already exists (DB)
+    const existing = await userModel.findByUsername(username);
+    if (existing) return res.status(409).json({ error: "Username already exists" });
 
-    // hash + salt password
+    // Hash password
     const hash = await bcrypt.hash(password, 10);
 
-    //store user
-    const user = {id: users.length + 1, username, password_hash: hash};
-    users.push(user);
+    // Create user in DB (do not pass id; DB manages it). Include email if provided.
+    const user = await userModel.createLocal({ username, email: req.body.email ?? null, passwordHash: hash });
 
-    // establish a fresh session and set minimal user identity
+    // Establish a fresh session and set minimal user identity
     req.session.regenerate(err => {
         if (err) return res.status(500).json({ error: 'Session error' });
-        req.session.user = { id: user.id, username: user.username };
-        res.status(201).json({ id: user.id, username: user.username });
+        req.session.user = userModel.toPublic(user);
+        req.session.save(() => res.status(201).json(userModel.toPublic(user)));
     });
 };
 
 
 exports.login = async (req, res) => {
-    const {username, password} = req.body;
+    const { username, password } = req.body;
     if (!username || !password)
-        return res.status(400).json({error: "Username or password required"});
-    const found = users.find(u => u.username === username);
-    if (!found) return res.status(401).json({error: "Invalid username or password"});
-    const valid = await bcrypt.compare(password, found.password_hash);
-    if (!valid) return res.status(401).json({error: "Invalid username or password"});
-    // rotate the session to prevent fixation, then store identity
+        return res.status(400).json({ error: "Username or password required" });
+
+    // Allow login by username OR email
+    const row =
+        (await userModel.findByUsername(username)) ||
+        (await userModel.findByEmail(username));
+    if (!row) return res.status(401).json({ error: "Invalid username or password" });
+
+    const ok = await bcrypt.compare(password, row.password_hash || "");
+    if (!ok) return res.status(401).json({ error: "Invalid username or password" });
+
+    // Rotate the session and set identity
     req.session.regenerate(err => {
-        if (err) return res.status(500).json({ error: 'Session error' });
-        req.session.user = { id: found.id, username: found.username };
-        res.json({ id: found.id, username: found.username });
+        if (err) return res.status(500).json({ error: "Session error" });
+        req.session.user = userModel.toPublic(row);
+        req.session.save(() => res.json(userModel.toPublic(row)));
     });
-}
+};
 
 exports.logout = (req, res, next) => {
     const finish = () => {
         // destroy session and clear session cookie
         req.session.destroy(() => {
-            res.clearCookie('session'); // match your express-session cookie name
+            res.clearCookie('session'); // NOTE: if you configured a different cookie name, change it here
             res.sendStatus(204);
         });
     };
@@ -79,4 +83,3 @@ exports.logout = (req, res, next) => {
         finish();
     }
 };
-

@@ -1,6 +1,8 @@
 const passport = require('passport');
 const {Strategy: GoogleStrategy} = require('passport-google-oauth20')
 const {Strategy: FacebookStrategy} = require('passport-facebook');
+const UserModel = require('../models/User');
+const userModel = require("../models/user");
 
 //TODO: import your users store/helpers here
 
@@ -15,9 +17,8 @@ module.exports = function loadPassport(app) {
         });
     });
 
-    passport.deserializeUser((obj, done) => {
-        //TODO: replace with db lookup
-        done(null, obj)
+    passport.deserializeUser((user, done) => {
+        done(null, user);
     })
 
     // google strategy
@@ -29,15 +30,13 @@ module.exports = function loadPassport(app) {
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const email  = profile.emails?.[0]?.value ?? null;
+                const provider = 'google';
+                const providerId = profile.id;
+                const email = profile.emails?.[0]?.value ?? null;
                 const avatar = profile.photos?.[0]?.value ?? null;
                 const username = profile.displayName || profile.name?.givenName || 'Google User';
-                return done(null, {
-                    id: profile.id,
-                    username,
-                    email,
-                    avatar,
-                });
+                const user = await userModel.upsertOAuth({provider, providerId, username, email, avatar});
+                return done(null, userModel.toPublic(user))
             } catch (err) {
                 return done(err);
             }
@@ -54,15 +53,13 @@ module.exports = function loadPassport(app) {
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const email  = profile.emails?.[0]?.value ?? null; // FB may not provide email
+                const provider = 'facebook';
+                const providerId = profile.id;
+                const email = profile.emails?.[0]?.value ?? null; // FB may not provide email
                 const avatar = profile.photos?.[0]?.value ?? null;
                 const username = profile.displayName || profile.username || 'Facebook User';
-                return done(null, {
-                    id: profile.id,
-                    username,
-                    email,
-                    avatar,
-                });
+                const user = await userModel.upsertOAuth({provider, providerId, username, email, avatar});
+                return done(null, userModel.toPublic(user))
             } catch (err) {
                 return done(err);
             }
