@@ -7,7 +7,7 @@ import {AuthContext} from "../../context/AuthContext";
 
 
 export default function Register() {
-    const [form, setForm] = useState({username: '', password: ''});
+    const [form, setForm] = useState({email: '',password: '', firstname: '', lastname: ''});
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
@@ -17,13 +17,14 @@ export default function Register() {
     function onChange(e) {
         setForm({...form, [e.target.name]: e.target.value});
     }
+    console.log(form)
 
     async function onSubmit(e) {
         e.preventDefault()
         setError('')
         setLoading(true)
         try {
-            const res = await fetch("http://localhost:4000/auth/register", {
+            const res = await fetch("http://localhost:4000/api/auth/register", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -34,11 +35,13 @@ export default function Register() {
             const data = await res.json();
             if (!res.ok) {
                 setError(data.error || "User already exists.");
-            return;
+                return;
             }
             console.log("Registered as:", data);
             setSuccess('Account created successfully! Redirecting....');
-            setTimeout(() =>{navigate('/')}, 1500)
+            setTimeout(() => {
+                navigate('/')
+            }, 1500)
             setUser(data);
             setLoading(false)
         } catch (err) {
@@ -57,13 +60,35 @@ export default function Register() {
             )}
             <form onSubmit={onSubmit}>
                 <div className="user-pass">
-                    <label>Username</label> <br/>
+                    <label>Email</label> <br/>
                     <input
-                        id="username"
-                        name="username"
-                        value={form.username}
+                        id="signup-email"
+                        name="email"
+                        value={form.email}
                         onChange={onChange}
-                        autoComplete="username"
+                        autoComplete="email"
+                        required
+                    />
+                </div>
+                <div className="user-pass">
+                    <label>First Name</label> <br/>
+                    <input
+                        id="signup-name"
+                        name="firstname"
+                        value={form.firstname}
+                        onChange={onChange}
+                        autoComplete="given-name"
+                        required
+                    />
+                </div>
+                <div className="user-pass">
+                    <label>Last Name</label> <br/>
+                    <input
+                        id="signup-lastname"
+                        name="lastname"
+                        value={form.lastname}
+                        onChange={onChange}
+                        autoComplete="family-name"
                         required
                     />
                 </div>
@@ -75,9 +100,8 @@ export default function Register() {
                         name="password"
                         value={form.password}
                         onChange={onChange}
-                        autoComplete="new-password"
                         required
-                        minLength={8}
+                        minLength={6}
                     />
                 </div>
                 <button type="submit" disabled={loading}>

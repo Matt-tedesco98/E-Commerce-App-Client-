@@ -1,17 +1,17 @@
-require('dotenv').config()
+require('dotenv').config();
+const { Pool } = require('pg');
 
-const {Pool} = require('pg')
+// connection pool
 
 const pool = new Pool({
-        user: process.env.DB_USER,
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT,
-    }
-);
+    user: process.env.DB_USER,
+    password: String(process.env.DB_PASSWORD),
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
+    ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false} : false,
+});
 
 module.exports = {
-  query: (text, params) => pool.query(text, params)
-}
-
+    query: (text, params) => pool.query(text, params),
+};

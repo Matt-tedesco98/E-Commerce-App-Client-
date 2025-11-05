@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 
 export default function Login() {
-    const [form, setForm] = useState({username: '', password: ''});
+    const [form, setForm] = useState({email: '', password: ''});
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function Login() {
         setError('')
         setLoading(true)
         try {
-            const res = await fetch("http://localhost:4000/auth/login", {
+            const res = await fetch("http://localhost:4000/api/auth/login", {
                 method: "POST",
                 credentials: "include",
                 headers: {
@@ -54,9 +54,9 @@ export default function Login() {
                 <div className="user-pass">
                     <label>Username</label> <br/>
                     <input
-                        id="username"
-                        name="username"
-                        value={form.username}
+                        id="email"
+                        name="email"
+                        value={form.email}
                         onChange={onChange}
                         autoComplete="username"
                         required
@@ -72,7 +72,7 @@ export default function Login() {
                         onChange={onChange}
                         autoComplete="current-password"
                         required
-                        minLength={8}
+                        minLength={7}
                     />
                 </div>
                 <button type="submit" disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</button>

@@ -72,3 +72,11 @@ a:hover {
     text-align: center;
     font-size: 20px;
 }
+
+.error {
+    background: #ffe6e6;
+    border: 1px solid #f88;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}

@@ -11,7 +11,7 @@ function NavBar() {
 
     async function handleLogout() {
         try {
-            const res = await fetch("http://localhost:4000/auth/logout", {
+            const res = await fetch("http://localhost:4000/api/auth/logout", {
                 method: "POST",
                 credentials: "include",
             });
@@ -34,7 +34,7 @@ function NavBar() {
                 <div className="nav-right">
                 {!loading && user ?
                     <>
-                        <span>Welcome, {user.username.split(" ")[0]}</span>
+                        <span>Welcome, {user.username}</span>
                         <button type="button"
                                 onClick={handleLogout}
                                 className="logout-btn">
