@@ -25,8 +25,43 @@ const findUserByEmail = async (email) => {
     }
 }
 
+const findByGoogleId = async (id) => {
+    const statement = `SELECT *
+                       FROM users
+                       WHERE google ->> 'id' = $1`;
+    const values = [id];
+    const result = await db.query(statement, values);
+    if (result.rows?.length) {
+        return result.rows[0];
+    }
+    return null;
+}
+
+const findByFacebookId = async (id) => {
+    const statement = `SELECT *
+                       FROM users
+                       where facebook ->> 'id' = $1`;
+    const values = [id];
+    const result = await db.query(statement, values);
+    if (result.rows?.length) {
+        return result.rows[0];
+    }
+    return null;
+}
+
+const findById = async (id) => {
+    const statement = `SELECT *
+                       FROM users
+                       WHERE userid = $1`;
+    const values = [id];
+    const result = await db.query(statement, values);
+    if (result.rows?.length) {
+        return result.rows[0];
+    }
+    return null;
+}
+
 
 module.exports = {
-    createUser,
-    findUserByEmail,
+    createUser, findUserByEmail, findByGoogleId, findById, findByFacebookId
 };

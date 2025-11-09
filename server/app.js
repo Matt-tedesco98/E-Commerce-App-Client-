@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-var session = require('express-session');
+const session = require('express-session');
+const passport = require('./Passport/passport');
+console.log('Strategies:', Object.keys(require('passport')._strategies));
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -18,11 +20,12 @@ app.use(cors(
     }
 ));
 
+app.set('trust proxy', 1);
+
 app.use(session({
-    name: 'session',
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         httpOnly: true,
         sameSite: "lax",
@@ -30,6 +33,9 @@ app.use(session({
         maxAge: 24 * 60 * 60 * 1000,
     }
 }))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);

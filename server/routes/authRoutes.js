@@ -77,10 +77,18 @@ router.post("/logout", authController.logout);
 
 // google auth
 router.get("/google",
-    passport.authenticate('google',{scope: ['profile, email']}))
+    passport.authenticate('google', {scope: ['profile']}))
 
 router.get('/google/callback',
-    passport.authenticate('google', {failureRedirect: '/login', successRedirect: '/'}))
+    passport.authenticate('google', {failureRedirect: 'http://localhost:3000/login', successRedirect: '/'}),
+    (req, res) => {
+        res.send(req.user);
+    })
+
+router.get('/facebook',
+    passport.authenticate('facebook'))
+router.get('/facebook/callback',
+    passport.authenticate('facebook', {failureRedirect: 'http://localhost:3000/login', successRedirect: '/'}))
 
 
 module.exports = router;

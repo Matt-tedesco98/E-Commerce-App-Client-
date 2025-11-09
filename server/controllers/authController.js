@@ -58,6 +58,48 @@ const loginUser = async (req, res) => {
     }
 
 };
+
+const findUserById = async (req, res, id) => {
+    const user = await userModel.findById(id)
+    if (!user) {
+        res.status(404).json({error: 'User not found'});
+    }
+    return user;
+}
+
+// google login
+const  googleLogin = async (profile) => {
+    const {id, name, email} = profile;
+    try {
+        const user = await userModel.findByGoogleId(id);
+        if(!user){
+            return await userModel.createUser({
+                email: email,
+                firstname: name.givenName,
+                lastname: name.familyName,
+                password: null,
+                google: JSON.stringify(profile),
+            });
+        }
+        return user;
+    } catch (err) {
+        console.error('google login error', err);
+        return null;
+    }
+}
+
+const facebookLogin = async (profile) => {
+    const {id, displayName} = profile;
+    const user = await userModel.findByFacebookId(id);
+    if (!user) {
+        return await userModel.createUser({
+            firstname: displayName.split(' ')[0],
+            lastname: displayName.split(' ')[1],
+            facebook: JSON.stringify(profile),
+        })
+    }
+}
+
 const me = async (req, res) => {
     const {firstName, lastName, email} = req.session.user;
     res.json({firstName, lastName, email});
@@ -87,5 +129,8 @@ module.exports = {
     registerUser,
     loginUser,
     logout,
-    me
+    me,
+    googleLogin,
+    findUserById,
+    facebookLogin,
 };
