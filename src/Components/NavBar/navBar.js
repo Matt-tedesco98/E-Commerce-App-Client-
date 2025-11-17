@@ -8,7 +8,6 @@ function NavBar() {
     const navigate = useNavigate();
     const {user, setUser, loading} = useContext(AuthContext);
     console.log("AuthContext value in NavBar:", useContext(AuthContext));
-
     async function handleLogout() {
         try {
             const res = await fetch("http://localhost:4000/api/auth/logout", {
@@ -34,7 +33,7 @@ function NavBar() {
                 <div className="nav-right">
                 {!loading && user ?
                     <>
-                        <span>Welcome, {user.username}</span>
+                        <span>Welcome, {user.firstname || 'Null'}</span>
                         <button type="button"
                                 onClick={handleLogout}
                                 className="logout-btn">

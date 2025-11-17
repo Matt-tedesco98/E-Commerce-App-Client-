@@ -10,7 +10,6 @@ const authController = require('../controllers/authController');
  *   description: User authentication
  */
 
-
 // POST /api/auth/register
 /**
  * @swagger
@@ -56,10 +55,10 @@ router.post('/register', authController.registerUser);
  *           schema:
  *             type: object
  *             required:
- *               - username
+ *               - email
  *               - password
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *               password:
  *                 type: string
@@ -71,7 +70,19 @@ router.post('/register', authController.registerUser);
  *       500:
  *         description: Internal server error
  */
-router.post('/login', authController.loginUser);
+router.post('/login',
+    passport.authenticate('local'), (req, res) => {
+        const {password, ...safeUser} = req.user;
+        console.log(safeUser);
+        res.json({authed: true, user: safeUser});
+    });
+
+router.post('/local',
+    passport.authenticate('local'),
+    (req, res) => res.json({message: 'Logged in (session)', user: req.user})
+);
+
+router.get('/me', authController.me);
 
 router.post("/logout", authController.logout);
 
@@ -80,15 +91,16 @@ router.get("/google",
     passport.authenticate('google', {scope: ['profile']}))
 
 router.get('/google/callback',
-    passport.authenticate('google', {failureRedirect: 'http://localhost:3000/login', successRedirect: '/'}),
+    passport.authenticate('google', {failureRedirect: 'http://localhost:3000/login', successRedirect: 'http://localhost:3000/'}),
     (req, res) => {
         res.send(req.user);
+        console.log(req.user);
     })
 
 router.get('/facebook',
     passport.authenticate('facebook'))
 router.get('/facebook/callback',
-    passport.authenticate('facebook', {failureRedirect: 'http://localhost:3000/login', successRedirect: '/'}))
+    passport.authenticate('facebook', {failureRedirect: 'http://localhost:3000/login', successRedirect: 'http://localhost:3000/'}))
 
 
 module.exports = router;

@@ -1,10 +1,11 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const createError = require('http-errors');
+const userService = require('../services/user');
 
 const registerUser = async (req, res) => {
     let {email, password, firstname, lastname} = req.body;
-    console.log(email, password, firstname, lastname)
     if (!email || !password || !firstname || !lastname) {
         return res.status(400).json({message: 'Missing required fields'});
     }
@@ -18,43 +19,37 @@ const registerUser = async (req, res) => {
 
         const newUser = await userModel.createUser({email, password: hashedPassword, firstname, lastname});
         res.status(201).json({
-            message: 'User created successfully',
-            user: {
-                id: newUser.userid,
-                email: newUser.email,
-                firstname: newUser.firstname,
-                lastname: newUser.lastname,
+            message: 'User created successfully', user: {
+                id: newUser.userid, email: newUser.email, firstname: newUser.firstname, lastname: newUser.lastname,
             }
         });
+        req.login(newUser, (err) => {
+            if (err) {
+                console.error('Error logging in user:', err);
+                return res.status(500).json({error: 'Internal server error'});
+            }
+            return newUser
+        })
     } catch (err) {
         console.error('register error', err);
         res.status(500).json({error: 'Internal server error'});
     }
 };
 
-const loginUser = async (req, res) => {
-    const {email, password} = req.body;
+const loginUser = async (data) => {
+    const {email, password} = data;
     if (!email || !password) {
-        res.status(400).json({message: 'Missing required fields'});
-        return;
+        throw createError(400, 'Missing required fields');
     }
-    const userEmail = await userModel.findUserByEmail(email);
-    if (!userEmail) {
-        res.status(401).json({error: 'Invalid credentials'});
-        return;
+    const user = await userModel.findUserByEmail(email);
+    if (!user) {
+        throw createError(401, 'Invalid credentials');
     }
-    const passwordCompare = await bcrypt.compare(password, userEmail.password);
+    const passwordCompare = await bcrypt.compare(password, user.password);
     if (passwordCompare) {
-        const payload = {
-            userID: userEmail.id,
-            email: userEmail.email,
-        }
-        const secretKey = process.env.JWT_SECRET
-        const expiresIn = process.env.JWT_EXPIRES_IN;
-        const token = jwt.sign(payload, secretKey, {expiresIn});
-        res.status(200).json({message: 'User logged in successfully', token,});
+        return user;
     } else {
-        res.status(401).json({error: 'Invalid credentials'});
+        throw createError(401, 'Invalid credentials');
     }
 
 };
@@ -68,11 +63,11 @@ const findUserById = async (req, res, id) => {
 }
 
 // google login
-const  googleLogin = async (profile) => {
+const googleLogin = async (profile) => {
     const {id, name, email} = profile;
     try {
         const user = await userModel.findByGoogleId(id);
-        if(!user){
+        if (!user) {
             return await userModel.createUser({
                 email: email,
                 firstname: name.givenName,
@@ -90,19 +85,30 @@ const  googleLogin = async (profile) => {
 
 const facebookLogin = async (profile) => {
     const {id, displayName} = profile;
-    const user = await userModel.findByFacebookId(id);
-    if (!user) {
-        return await userModel.createUser({
-            firstname: displayName.split(' ')[0],
-            lastname: displayName.split(' ')[1],
-            facebook: JSON.stringify(profile),
-        })
+    try {
+        const user = await userModel.findByFacebookId(id);
+        if (!user) {
+            return await userModel.createUser({
+                firstname: displayName.split(' ')[0],
+                lastname: displayName.split(' ')[1],
+                facebook: JSON.stringify(profile),
+            })
+        }
+        return user;
+    } catch (err) {
+        console.error('facebook login error', err);
+        return null;
     }
 }
 
 const me = async (req, res) => {
-    const {firstName, lastName, email} = req.session.user;
-    res.json({firstName, lastName, email});
+    if (!req.user) {
+        return res.json({authed: false, user: null});
+    }
+    const {password, ...userWithoutPassword} = req.user;
+    res.status(200).json({authed: true, user: userWithoutPassword, sid: req.sessionID});
+    // res.json({authed: !!req.user, user: req.user || null, sid: req.sessionID});
+
 }
 
 const logout = (req, res, next) => {
@@ -126,11 +132,5 @@ const logout = (req, res, next) => {
 };
 
 module.exports = {
-    registerUser,
-    loginUser,
-    logout,
-    me,
-    googleLogin,
-    findUserById,
-    facebookLogin,
+    registerUser, loginUser, logout, me, googleLogin, findUserById, facebookLogin,
 };

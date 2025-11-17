@@ -27,15 +27,16 @@ export default function Login() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(form)
+                body: JSON.stringify({email: form.email, password: form.password}),
             })
             const data = await res.json();
+            console.log(data)
             if (!res.ok) {
                 setError(data.error || "Login failed.");
                 return;
             }
-            console.log("Logged in as:", data.username);
-            setUser(data);
+            console.log("Logged in as:", data.user);
+            setUser(data.user);
             setLoading(false)
             navigate("/")
         } catch (err) {
