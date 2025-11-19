@@ -2,10 +2,11 @@ import './ProductDetails.css';
 import {useEffect, useState, useMemo} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
 
-const API = 'http://localhost:4000';
+const API = 'http://localhost:4000/api';
 
 export default function ProductDetails() {
-    const {id} = useParams();
+    const {productid} = useParams();
+    console.log("productid:", productid);
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ export default function ProductDetails() {
         (async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`${API}/products/${id}`, {
+                const res = await fetch(`http://localhost:4000/api/products/${productid}`, {
                     credentials: 'omit',
                     headers: {
                         'Accept': 'application/json'
@@ -36,11 +37,11 @@ export default function ProductDetails() {
         return () => {
             cancelled = true;
         }
-    }, [id]);
+    }, [productid]);
 
     const imgSrc = useMemo(() => {
         if (!product) return "";
-        return product.imageUrl || "https://via.placeholder.com/150";
+        return product.image_url || "https://via.placeholder.com/150";
     }, [product]);
 
     const addToCart = async () => {
@@ -53,7 +54,7 @@ export default function ProductDetails() {
                     'Content-Type': 'application/json',
                     Accept: 'application/json'
                 },
-                body: JSON.stringify({productId: id, quantity: 1}),
+                body: JSON.stringify({productid: productid, quantity: 1}),
             });
             if (res.status === 401) {
                 navigate('/login');

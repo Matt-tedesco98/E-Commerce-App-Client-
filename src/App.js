@@ -16,7 +16,7 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path='/auth/callback' element={<AuthCallback/>}/>
                 <Route path='/products' element={<ProductPage/>}/>
-                <Route path='/products/:id' element={<ProductDetails/>} />
+                <Route path='/products/:productid' element={<ProductDetails/>} />
             </Routes>
         </BrowserRouter>
     )

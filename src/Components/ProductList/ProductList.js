@@ -2,7 +2,7 @@ import {useEffect, useState, useMemo} from "react";
 import ProductCard from "../ProductCard/ProductCard";
 import "./ProductList.css";
 
-const API = "http://localhost:4000"
+const API = "http://localhost:4000/api/products"
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
@@ -16,7 +16,7 @@ export default function ProductList() {
         (async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`${API}/products`, {
+                const res = await fetch(`${API}`, {
                     credentials: "omit",
                     headers: {
                         "Accept": "application/json"
