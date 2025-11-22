@@ -1,4 +1,5 @@
 import "./navBar.css"
+import { FaCartShopping } from "react-icons/fa6";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
@@ -34,6 +35,7 @@ function NavBar() {
                 {!loading && user ?
                     <>
                         <span>Welcome, {user.firstname || 'Null'}</span>
+                        <FaCartShopping className="cart-icon" onClick={() => navigate("/cart")}/>
                         <button type="button"
                                 onClick={handleLogout}
                                 className="logout-btn">

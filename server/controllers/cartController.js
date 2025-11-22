@@ -18,12 +18,12 @@ const getCart = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-    const {userId, productId, quantity} = req.body;
-    if (!userId || !productId || typeof quantity !== 'number') {
+    const {userId, productid, quantity} = req.body;
+    if (!userId || !productid || typeof quantity !== 'number') {
         return res.status(400).json({error: "missing required field"});
     }
     try {
-        const addCartItem = await cartModel.addItemToCart(userId, productId, quantity);
+        const addCartItem = await cartModel.addItemToCart(userId, productid, quantity);
         res.status(200).json({message: 'Added to cart', cartItem: addCartItem});
     } catch (err) {
         console.error('Error adding cart', err);

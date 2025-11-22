@@ -1,8 +1,10 @@
 import './ProductDetails.css';
-import {useEffect, useState, useMemo} from 'react';
+import {useEffect, useState, useMemo, useContext} from 'react';
 import {useParams, useNavigate} from 'react-router-dom';
+import {AuthContext} from "../../context/AuthContext";
 
 const API = 'http://localhost:4000/api';
+
 
 export default function ProductDetails() {
     const {productid} = useParams();
@@ -13,6 +15,7 @@ export default function ProductDetails() {
     const [error, setError] = useState('');
     const [adding, setAdding] = useState(false);
     const [added, setAdded] = useState(false);
+    const {user} = useContext(AuthContext);
 
     useEffect(() => {
         let cancelled = false;
@@ -45,29 +48,37 @@ export default function ProductDetails() {
     }, [product]);
 
     const addToCart = async () => {
+        if (!user){
+            navigate("/login");
+            return;
+        }
         try {
-            setAdding(true);
-            const res = await fetch(`${API}/cart`, {
+            setLoading(true);
+            const res = await fetch(`${API}/cart/add`, {
                 method: 'POST',
-                credentials: 'include',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
-                    Accept: 'application/json'
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({productid: productid, quantity: 1}),
+                body: JSON.stringify({
+                    productid: productid,
+                    quantity: 1,
+                    userId: user.userid,
+                })
             });
+
             if (res.status === 401) {
-                navigate('/login');
+                navigate("/login");
                 return;
             }
-            if (!res.ok) {
-                throw new Error('Failed to add to cart');
-            }
-            setAdded(true);
+
+            if (!res.ok) throw new Error('failed to add to cart');
+            setAdding(true);
         } catch (e) {
             setError(e.message || 'Failed to add to cart');
         } finally {
-            setAdding(false);
+            setLoading(false);
         }
     };
 
@@ -92,4 +103,3 @@ export default function ProductDetails() {
         </main>
     )
 }
-
