@@ -1,5 +1,6 @@
 import {useEffect, useState, useMemo} from "react";
 import ProductCard from "../ProductCard/ProductCard";
+import {getAllProducts} from "../../apis/product";
 import "./ProductList.css";
 
 const API = "http://localhost:4000/api/products"
@@ -16,27 +17,16 @@ export default function ProductList() {
         (async () => {
             try {
                 setLoading(true);
-                const res = await fetch(`${API}`, {
-                    credentials: "omit",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                });
-                if (!res.ok) {
-                    throw new Error("Failed to fetch products");
-                }
-                const data = await res.json();
+                const product = await getAllProducts()
                 if (!cancelled) {
-                    if (Array.isArray(data)) {
-                        setProducts(data);
-                    }else {
-                        setProducts([]);
-                    }
-                    setLoading(false);
+                    setProducts(product);
                 }
             } catch (e) {
                 if (!cancelled) {
                     setError("Failed to fetch products");
+                }
+            } finally {
+                if (!cancelled) {
                     setLoading(false);
                 }
             }

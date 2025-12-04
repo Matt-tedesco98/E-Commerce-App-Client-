@@ -68,8 +68,8 @@ export default function ProductDetails() {
                 })
             });
 
-            if (res.status === 401) {
-                navigate("/login");
+            if (res.status === 200) {
+                setAdded(true);
                 return;
             }
 

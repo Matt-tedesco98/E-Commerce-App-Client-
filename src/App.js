@@ -6,6 +6,7 @@ import AuthCallback from "./pages/AuthCallback/AuthCallback";
 import ProductPage from "./pages/products/ProductPage";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
+import CheckOut from "./pages/CheckOut/CheckOut";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path='/products' element={<ProductPage/>}/>
                 <Route path='/products/:productid' element={<ProductDetails/>} />
                 <Route path='/cart' element={<Cart/>}/>
+                <Route path='/checkout' element={<CheckOut/>}/>
             </Routes>
         </BrowserRouter>
     )
