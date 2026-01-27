@@ -7,20 +7,27 @@ import ProductPage from "./pages/products/ProductPage";
 import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Cart from "./pages/Cart/Cart";
 import CheckOut from "./pages/CheckOut/CheckOut";
+import OrderHistory from "./pages/Orders/OrderHistory";
+import OrderConfirmation from "./pages/Orders/OrderConfirmation";
+import Home from "./pages/Home/Home";
+import OrderDetails from "./pages/OrderDetails/OrderDetails";
 
 function App() {
     return (
         <BrowserRouter>
             <NavBar/>
             < Routes>
-                <Route path="/" element={<h1>Home</h1>}/>
+                <Route path="/" element={<Home/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path='/auth/callback' element={<AuthCallback/>}/>
                 <Route path='/products' element={<ProductPage/>}/>
-                <Route path='/products/:productid' element={<ProductDetails/>} />
+                <Route path='/products/:productid' element={<ProductDetails/>}/>
                 <Route path='/cart' element={<Cart/>}/>
                 <Route path='/checkout' element={<CheckOut/>}/>
+                <Route path='/orders' element={<OrderHistory/>}/>
+                <Route path='/orders/conformation/:orderid' element={<OrderConfirmation/>}/>
+                <Route path='/orders/details/:orderid' element={<OrderDetails/>}/>
             </Routes>
         </BrowserRouter>
     )

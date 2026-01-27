@@ -5,6 +5,9 @@ const getOrders = async (req, res) => {
     if (!userId) {
         return res.status(400).json({error: 'Missing user id'});
     }
+    if (Number(userId) !== req.user.userid) {
+        return res.status(403).json({error: 'Unauthorized'});
+    }
     try {
         const result = await orderModel.getOrdersByUserId(userId);
         return res.status(200).json(result.rows);
@@ -15,20 +18,35 @@ const getOrders = async (req, res) => {
 };
 
 const getOrderDetails = async (req, res) => {
-    const { orderId } = req.params;
+    const {orderId} = req.params;
     if (!orderId) {
         return res.status(400).json({error: 'Missing orderId'});
     }
-    try{
+    try {
         const result = await orderModel.getOrderDetailsByOrderId(orderId);
         return res.status(200).json(result.rows);
-    }catch(err){
+    } catch (err) {
         console.error('error getting orderDetails', err);
         return res.status(500).json({error: 'internal error'});
     }
 };
 
+const getOrderById = async (req, res) => {
+    const {orderId} = req.params;
+    if (!orderId) {
+        return res.status(400).json({error: 'Missing orderId'});
+    }
+    try {
+        const result = await orderModel.getOrderById(orderId);
+        return res.status(200).json(result.rows);
+    } catch (err) {
+        console.error('error getting orderDetails', err);
+        return res.status(500).json({error: 'internal error'});
+    }
+}
+
 module.exports = {
     getOrders,
     getOrderDetails,
+    getOrderById,
 }

@@ -1,5 +1,6 @@
 import react from "react";
 import './PastOrders.css'
+import {Link} from "react-router-dom";
 
 export default function PastOrders({orders = []}) {
     return (
@@ -10,9 +11,11 @@ export default function PastOrders({orders = []}) {
             ) : (
                 <ul>
                     {orders.map(order => (
-                        <li key={order.id}>
-                            Order #{order.orderid} - Total: ${order.total}
-                        </li>
+                        <Link to={`/orders/details/${order.orderid}`}>
+                            <li key={order.id}>
+                                Order #{order.orderid} - Total: ${order.total}
+                            </li>
+                        </Link>
                     ))}
                 </ul>
             )}

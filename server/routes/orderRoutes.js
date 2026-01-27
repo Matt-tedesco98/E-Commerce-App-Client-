@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const orderController = require('../controllers/orderController')
+const requireAuth = require('../middleware/requireAuth')
 
 /**
  * @swagger
@@ -39,7 +40,7 @@ const orderController = require('../controllers/orderController')
  *       500:
  *         description: Internal error
  */
-router.get('/:userId', orderController.getOrders);
+router.get('/:userId', requireAuth, orderController.getOrders);
 
 /**
  * @swagger
@@ -83,6 +84,8 @@ router.get('/:userId', orderController.getOrders);
  *       500:
  *         description: Internal error
  */
-router.get('/details/:orderId', orderController.getOrderDetails);
+router.get('/details/:orderId', requireAuth, orderController.getOrderDetails);
+
+router.get('/details/status/:orderId', requireAuth, orderController.getOrderById)
 
 module.exports = router;

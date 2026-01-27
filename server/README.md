@@ -8,7 +8,7 @@ This is a fully functional E-commerce REST API built using Node.js, Express, and
 
 ```
 E-commerce-App(REST API)/
-├── controllers/          # Route logic (Auth, Cart, Orders, Products, Checkout)
+├── controllers/          # Route logic (Auth, Cart, OrderHistory, Products, Checkout)
 ├── db/                   # PostgreSQL database connection
 ├── docs/                 # Swagger documentation setup
 ├── models/               # Data access logic (DB queries)
@@ -99,7 +99,7 @@ The API will run on: `http://localhost:8000`
 
 ---
 
-### 📑 Orders
+### 📑 OrderHistory
 
 | Method | Endpoint                    | Description               |
 |--------|-----------------------------|---------------------------|

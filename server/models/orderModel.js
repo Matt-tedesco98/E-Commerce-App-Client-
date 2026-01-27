@@ -27,10 +27,17 @@ const getOrderDetailsByOrderId = async (orderId) => {
         WHERE oi.orderid = $1`, [orderId]);
 };
 
+const getOrderById = async (orderId) => {
+    return await db.query(`SELECT *
+                           FROM orders
+                           where orderid = $1`, [orderId]);
+};
+
 
 module.exports = {
     createOrder,
     addOrderItem,
     getOrdersByUserId,
     getOrderDetailsByOrderId,
+    getOrderById,
 }

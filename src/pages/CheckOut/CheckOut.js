@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import useCart from '../../context/useCart';
 import { useNavigate } from 'react-router-dom';
 import CurrentCart from '../../Components/CurrentCart/CurrentCart';
+import StripeCheckoutForm from "../../Components/Checkout/StripeCheckoutForm";
 import './CheckOut.css';
 
 export default function Checkout() {
@@ -47,7 +48,6 @@ export default function Checkout() {
 
       <section className="checkout-content">
         <div className="checkout-items">
-          {/* reuse your existing cart display */}
           <CurrentCart items={items} onRemoveItem={removeItem}/>
         </div>
 
@@ -58,16 +58,7 @@ export default function Checkout() {
             Total: <strong>${total.toFixed(2)}</strong>
           </p>
 
-          {/* Stripe will go here later */}
-          <button
-            className="checkout-pay-btn"
-            onClick={() => {
-              // TODO: Stripe payment flow here
-              console.log('Proceed to payment with total:', total);
-            }}
-          >
-            Proceed to payment
-          </button>
+            <StripeCheckoutForm user={user} total={total}/>
         </aside>
       </section>
     </main>
