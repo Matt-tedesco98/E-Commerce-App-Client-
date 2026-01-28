@@ -21,13 +21,10 @@ export default function OrderDetails() {
                 setError('');
 
                 const orderItems = await getOrderByOrderId(orderid);
-                console.log("orderItems:", orderItems);
                 if (cancelled) return;
 
                 const order = await getOrderDetailsById(orderid)
-                console.log("order:", order);
                 const orderDetails = order.map((item) => item.status);
-                console.log("orderDetails:", orderDetails);
                 setOrderDetails(orderDetails);
 
                 const ids = [...new Set(orderItems.map((item) => item.productid))]

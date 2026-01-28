@@ -3,6 +3,7 @@ import PastOrders from "../../Components/PastOrders/PastOrders";
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigate, Link} from "react-router-dom";
 import {getOrders} from "../../apis/orders";
+import './OrdersHistory.css';
 
 export default function OrderHistory() {
     const {user, loading: authLoading} = useContext(AuthContext);
@@ -36,13 +37,12 @@ export default function OrderHistory() {
     }
 
     if (error) {
-        return <main>Error: {error}</main>;
+        return <main className="error">Error: {error}</main>;
     }
 
     return (
         <main>
-            <h1>Your Orders</h1>
-            <PastOrders orders={orders}/>
+            <PastOrders classname="PastOrders" orders={orders}/>
         </main>
     );
 }
