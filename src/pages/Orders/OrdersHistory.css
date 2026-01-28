@@ -1,4 +1,5 @@
-.error {
+main.error {
+    margin: 24px;
     color: red;
 }
 
