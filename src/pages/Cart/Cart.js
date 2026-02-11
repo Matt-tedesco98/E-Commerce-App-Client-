@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import './cart.css'
 import CurrentCart from "../../Components/CurrentCart/CurrentCart";
-import PastOrders from "../../Components/PastOrders/PastOrders";
 import {AuthContext} from "../../context/AuthContext";
 import useCart from "../../context/useCart"
 import {useNavigate} from "react-router-dom";
@@ -31,7 +30,6 @@ export default function Cart() {
         <div className="cart-main">
             <CurrentCart items={items} onRemoveItem={removeItem}/>
             <button className="checkout-btn" onClick={() => navigate('/checkout')}>Proceed to checkout</button>
-            <PastOrders orders={[]}/>
         </div>
     </main>
     )

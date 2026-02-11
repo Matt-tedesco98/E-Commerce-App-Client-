@@ -3,7 +3,6 @@ import './CurrentCart.css';
 
 export default function CurrentCart({items = [], onRemoveItem = () => {}}) {
     return (<section className="current-cart">
-            <h2>Current Cart</h2>
 
             {items.length === 0 ? (<p>Your cart is empty.</p>) : (<ul>
                     {items.map((item) => {

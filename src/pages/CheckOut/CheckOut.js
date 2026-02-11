@@ -35,7 +35,7 @@ export default function Checkout() {
     return (
       <main className="checkout-page">
         <h1>Checkout</h1>
-        <p>Your cart is empty.</p>
+        <p className="checkout-empty-message">Your cart is empty.</p>
       </main>
     );
   }

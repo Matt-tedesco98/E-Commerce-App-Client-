@@ -1,0 +1,51 @@
+.checkout-header {
+    margin: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.checkout-content {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
+
+.checkout-summary {
+    flex-grow: 1;
+}
+
+.checkout-form .stripe-card-element{
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.checkout-form button{
+    color: white;
+    background-color: black;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.checkout-page h1 {
+    padding: 12px;
+    text-align: center;
+    margin: 1rem;
+}
+
+.checkout-page .checkout-empty-message {
+    margin: 0;
+    color: #6b7280;
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 12px;
+    line-height: 1.5rem;
+
+}
