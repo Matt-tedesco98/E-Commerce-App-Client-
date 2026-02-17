@@ -1,0 +1,23 @@
+.order-confirmation {
+    text-align: center;
+}
+
+.order-confirmation h1 {
+    font-size: 2rem;
+}
+
+.order-confirmation p {
+    font-size: 1rem;
+}
+
+.order-confirmation button {
+    border: none;
+    font-size: 1.2rem;
+    padding: 1rem;
+    margin: 1rem;
+    background: cornflowerblue;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+
+}

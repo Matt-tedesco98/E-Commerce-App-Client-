@@ -62,7 +62,7 @@ const navigate = useNavigate();
 
                 const data = await checkoutRes.json();
                 console.log("data:", data);
-                navigate(`/orders/${data.orderId}`);
+                navigate(`/orders/conformation/${data.orderId}`);
 
                 setSuccess(true);
             }

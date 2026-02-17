@@ -11,6 +11,7 @@ import OrderHistory from "./pages/Orders/OrderHistory";
 import OrderConfirmation from "./pages/Orders/OrderConfirmation";
 import Home from "./pages/Home/Home";
 import OrderDetails from "./pages/OrderDetails/OrderDetails";
+import User from "./pages/User/User";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path='/orders' element={<OrderHistory/>}/>
                 <Route path='/orders/conformation/:orderid' element={<OrderConfirmation/>}/>
                 <Route path='/orders/details/:orderid' element={<OrderDetails/>}/>
+                <Route path='/user/:userid' element={<User/>}/>
             </Routes>
         </BrowserRouter>
     )

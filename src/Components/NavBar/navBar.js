@@ -1,5 +1,5 @@
 import "./navBar.css"
-import { FaCartShopping } from "react-icons/fa6";
+import {FaCartShopping} from "react-icons/fa6";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
@@ -32,24 +32,25 @@ function NavBar() {
                     <Link to="/products">Products</Link>
                 </div>
                 <div className="nav-right">
-                {!loading && user ?
-                    <>
-                        <span>Welcome, {user.firstname || 'Null'}</span>
-                        <FaCartShopping className="cart-icon" onClick={() => navigate("/cart")}/>
-                        <button type="button"
-                                onClick={handleLogout}
-                                className="logout-btn">
-                            Logout
-                        </button>
-                    </>
-                    :
-                    <>
-                        <Link to="/login">Login</Link>
-                        <span> | </span>
-                        <Link to="/register">Register</Link>
-                    </>
+                    {!loading && user ?
+                        <>
+                            <span className="user"> <Link
+                                to={`/user/${user.userid}`}>Welcome, {user.firstname || 'Null'}</Link></span>
+                            <FaCartShopping className="cart-icon" onClick={() => navigate("/cart")}/>
+                            <button type="button"
+                                    onClick={handleLogout}
+                                    className="logout-btn">
+                                Logout
+                            </button>
+                        </>
+                        :
+                        <>
+                            <Link to="/login">Login</Link>
+                            <span> | </span>
+                            <Link to="/register">Register</Link>
+                        </>
 
-                }
+                    }
                 </div>
             </nav>
         </header>

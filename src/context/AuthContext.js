@@ -16,7 +16,7 @@ export function AuthProvider({children}) {
                         }
                     });
 
-                    const ct = res.headers.get('content-type');
+                    const ct = res.headers.get('content-type') || '';
                     if (!ct.includes('application/json')) {
                         const msg = await res.text();
                         console.error('expected JSON from /auth/me, got:', msg.slice(0, 200));
