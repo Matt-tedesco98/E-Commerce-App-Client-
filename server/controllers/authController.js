@@ -1,8 +1,6 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
-const userService = require('../services/user');
 
 const registerUser = async (req, res) => {
     let {email, password, firstname, lastname} = req.body;
@@ -18,18 +16,15 @@ const registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await userModel.createUser({email, password: hashedPassword, firstname, lastname});
-        res.status(201).json({
-            message: 'User created successfully', user: {
-                id: newUser.userid, email: newUser.email, firstname: newUser.firstname, lastname: newUser.lastname,
-            }
-        });
         req.login(newUser, (err) => {
             if (err) {
-                console.error('Error logging in user:', err);
-                return res.status(500).json({error: 'Internal server error'});
+                return next(err);
             }
-            return newUser
-        })
+            return res.status(201).json({
+                message: "User registered successfully",
+                user: newUser
+            });
+        });
     } catch (err) {
         console.error('register error', err);
         res.status(500).json({error: 'Internal server error'});

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const cartController = require('../controllers/cartController');
 const checkoutController = require('../controllers/checkoutController');
+const requireAuth = require('../middleware/requireAuth');
 
 /**
  * @swagger
@@ -28,7 +29,7 @@ const checkoutController = require('../controllers/checkoutController');
  *       400:
  *         description: Missing userId
  */
-router.get('/:userId', cartController.getCart);
+router.get('/:userId', requireAuth, cartController.getCart);
 
 /**
  * @swagger
@@ -59,7 +60,7 @@ router.get('/:userId', cartController.getCart);
  *       400:
  *         description: Missing required fields
  */
-router.post('/add', cartController.addToCart);
+router.post('/add', requireAuth, cartController.addToCart);
 
 /**
  * @swagger
@@ -90,7 +91,7 @@ router.post('/add', cartController.addToCart);
  *       400:
  *         description: Missing required fields
  */
-router.put('/update', cartController.updateCartItem);
+router.put('/update', requireAuth, cartController.updateCartItem);
 
 /**
  * @swagger
@@ -115,7 +116,7 @@ router.put('/update', cartController.updateCartItem);
  *       400:
  *         description: Missing required fields
  */
-router.delete('/:userId/:productId', cartController.deleteCartItem);
+router.delete('/:userId/:productId', requireAuth, cartController.deleteCartItem);
 
 /**
  * @swagger
@@ -135,6 +136,6 @@ router.delete('/:userId/:productId', cartController.deleteCartItem);
  *       400:
  *         description: No cart found
  */
-router.post('/:userId/checkout', checkoutController.checkoutCart);
+router.post('/:userId/checkout', requireAuth, checkoutController.checkoutCart);
 
 module.exports = router;

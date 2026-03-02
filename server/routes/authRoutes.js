@@ -70,12 +70,19 @@ router.post('/register', authController.registerUser);
  *       500:
  *         description: Internal server error
  */
-router.post('/login',
-    passport.authenticate('local'), (req, res) => {
-        const {password, ...safeUser} = req.user;
-        console.log(safeUser);
-        res.json({authed: true, user: safeUser});
-    });
+router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) return next(err);
+        if (!user) {
+            return res.status(401).json({message: info?.message || "Unauthorized"});
+        }
+
+        req.logIn(user, (err) => {
+            if (err) return next(err);
+            return res.status(200).json({message: "Login successful", user});
+        });
+    })(req, res, next);
+});
 
 router.post('/local',
     passport.authenticate('local'),
@@ -91,7 +98,10 @@ router.get("/google",
     passport.authenticate('google', {scope: ['profile']}))
 
 router.get('/google/callback',
-    passport.authenticate('google', {failureRedirect: 'http://localhost:3000/login', successRedirect: 'http://localhost:3000/'}),
+    passport.authenticate('google', {
+        failureRedirect: 'http://localhost:3000/login',
+        successRedirect: 'http://localhost:3000/'
+    }),
     (req, res) => {
         res.send(req.user);
         console.log(req.user);
@@ -100,7 +110,10 @@ router.get('/google/callback',
 router.get('/facebook',
     passport.authenticate('facebook'))
 router.get('/facebook/callback',
-    passport.authenticate('facebook', {failureRedirect: 'http://localhost:3000/login', successRedirect: 'http://localhost:3000/'}))
+    passport.authenticate('facebook', {
+        failureRedirect: 'http://localhost:3000/login',
+        successRedirect: 'http://localhost:3000/'
+    }))
 
 
 module.exports = router;

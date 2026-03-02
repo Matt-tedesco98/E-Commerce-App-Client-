@@ -11,8 +11,6 @@ export async function getOrders(userId) {
     }
 
     const data = await res.json();
-    console.log(typeof data)
-    console.log(data)
     return data || [];
 }
 
@@ -26,8 +24,6 @@ export async function getOrderByOrderId(orderId) {
 
     const data = await res.json();
 
-    console.log(data)
-    console.log(typeof data)
     return data || [];
 }
 

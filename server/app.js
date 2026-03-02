@@ -3,7 +3,6 @@ const app = express();
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('./Passport/passport');
-console.log('Strategies:', Object.keys(require('passport')._strategies));
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');

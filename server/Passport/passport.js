@@ -8,8 +8,6 @@ const userModel = require('../models/userModel');
 
 passport.serializeUser((user, done) => {
     console.log(user);
-    console.log('[serializeUser] storing', {userid: user.userid});
-    console.log('[local verify] user from loginUser =', user)
     done(null, {
         userid: user.userid
     });
@@ -17,9 +15,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (obj, done) => {
     try {
-        console.log('[deserializeUser] reading', obj);
         const userId = await userModel.findById(obj.userid);
-        console.log('[deserializeUser] looked up', !!userId, userId && userId.userid);
         done(null, userId);
     } catch (err) {
         done(err);
@@ -38,6 +34,11 @@ passport.use(new LocalStrategy(
             const user = await authController.loginUser(data);
             done(null, user);
         } catch (err) {
+            // If your loginUser throws a 401 (invalid credentials),
+            // treat it as an auth failure (not a server error).
+            if (err.status === 401) {
+                return done(null, false, {message: err.message || "Invalid credentials"});
+            }
             return done(err);
         }
     }
@@ -50,7 +51,6 @@ passport.use('google', new GoogleStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
     try {
         const user = await authController.googleLogin(profile);
-        console.log(user)
         return done(null, user);
     } catch (err) {
         return done(err);

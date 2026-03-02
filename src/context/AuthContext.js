@@ -26,7 +26,6 @@ export function AuthProvider({children}) {
                     if (!res.ok) return;
                     const data = await res.json();
                     setUser(data.user);
-                    console.log("User:", data.user.firstname);
                 } catch (e) {
                     console.error("Auth check failed", e);
                 } finally {

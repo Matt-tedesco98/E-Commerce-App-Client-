@@ -2,7 +2,7 @@ const API_ROOT = 'http://localhost:4000/api'
 
 export async function getCart(userId) {
     const res = await fetch(`${API_ROOT}/cart/${userId}`,
-        {credentials: 'omit'});
+        {credentials: 'include'});
 
     if (!res.ok) {
         throw new Error('Failed to fetch cart');

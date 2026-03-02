@@ -6,7 +6,6 @@ import useCart from "../../context/useCart";
 
 export default function User() {
     const {user, loading, setUser} = useContext(AuthContext);
-    console.log("User:", user);
     const {error} = useCart(user)
     const navigate = useNavigate();
 

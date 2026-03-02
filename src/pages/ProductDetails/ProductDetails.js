@@ -8,7 +8,6 @@ const API = 'http://localhost:4000/api';
 
 export default function ProductDetails() {
     const {productid} = useParams();
-    console.log("productid:", productid);
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);

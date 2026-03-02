@@ -5,7 +5,6 @@ import "./OrderConfirmation.css"
 
 export default function OrderConfirmation() {
     const {orderid} = useParams();
-    console.log("orderId:", orderid);
     const navigate = useNavigate();
 
     const [items, setItems] = useState([]);
