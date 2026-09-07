@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+# E-Commerce Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack e-commerce application built with **React, Node.js, Express, PostgreSQL, Passport, and Stripe**.
 
-## Available Scripts
+The project covers a complete shopping workflow: browsing products, authentication, cart management, checkout, payments, and order history.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+### Shopping experience
+- Browse products
+- View product details
+- Add and remove cart items
+- Persistent user carts
+- Checkout flow
+- Order confirmation and history
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Authentication
+- Local email/password authentication
+- Password hashing with bcrypt
+- Session-based authentication with Passport
+- Google OAuth integration
+- Facebook OAuth integration
+- Authenticated user-state handling in React
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Payments
+- Stripe Payment Intents
+- Stripe Elements integration
+- Server-side cart total calculation
+- Checkout-to-order workflow
 
-### `npm test`
+### Backend
+- REST API built with Express
+- PostgreSQL persistence
+- Product, cart, order, authentication, and payment routes
+- Swagger API documentation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Tech Stack
 
-### `npm run build`
+### Frontend
+- React 19
+- React Router
+- React Context
+- Redux Toolkit / React Redux
+- Stripe React / Stripe.js
+- JavaScript
+- CSS
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend
+- Node.js
+- Express 5
+- PostgreSQL
+- Passport
+- bcrypt
+- Stripe
+- Swagger / OpenAPI
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```text
+├── src/
+│   ├── Components/     Reusable UI and checkout components
+│   ├── pages/          Products, cart, checkout, auth, and orders
+│   ├── context/        Authentication and cart state
+│   └── apis/           REST API client functions
+│
+└── server/
+    ├── controllers/    Request and workflow handlers
+    ├── models/         PostgreSQL data access
+    ├── routes/         Express API routes
+    ├── Passport/       Authentication strategies
+    ├── docs/           Swagger configuration
+    └── db/             Database connection and setup
+```
 
-### `npm run eject`
+## What This Project Demonstrates
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This project demonstrates full-stack application development across a real multi-step workflow rather than isolated CRUD screens. It combines routed React UI, asynchronous API integration, relational data, authentication, third-party OAuth, shopping-cart state, payment processing, and backend service design.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Running Locally
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Install frontend dependencies:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm install
+npm start
+```
 
-## Learn More
+The backend is located in the `server` directory and requires its own dependencies and environment configuration for PostgreSQL, authentication providers, sessions, and Stripe.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Author
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Matthew Tedesco**
